@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const PartNumberForm = () => {
-  return (
-    <div>PartNumberForm</div>
-  )
-}
+  return <div>PartNumberForm</div>;
+};
 
-export default PartNumberForm
+export default PartNumberForm;

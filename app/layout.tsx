@@ -1,6 +1,7 @@
 'use client';
 import './globals.css';
 
+import { UserProvider } from '@auth0/nextjs-auth0/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -21,10 +22,12 @@ export default function RootLayout({
       */}
       <head />
       <body>
-        <QueryClientProvider client={queryClient}>
-          <Drawer>{children}</Drawer>
-          <ReactQueryDevtools initialIsOpen={false} />
-        </QueryClientProvider>
+        <UserProvider>
+          <QueryClientProvider client={queryClient}>
+            <Drawer>{children}</Drawer>
+            <ReactQueryDevtools initialIsOpen={false} />
+          </QueryClientProvider>
+        </UserProvider>
       </body>
     </html>
   );

@@ -7,7 +7,7 @@ const CustomerPage = ({ params }: { params: { id: string } }) => {
   //   console.log(Number(id) + 3);
   return (
     <>
-      <div>CustomerPage  </div>
+      <div>CustomerPage </div>
       <CustomerForm id={id} />
     </>
   );

@@ -10,6 +10,8 @@ export default function Home() {
   return (
     <Container>
       <Link href={'/about'}>Hola Maincas!</Link>
+      <a href='/api/auth/login'>Login</a>
+      <a href='/api/auth/logout'>Logout</a>
     </Container>
   );
 }

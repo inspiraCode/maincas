@@ -1,9 +1,7 @@
-import React from 'react'
+import React from 'react';
 
 const PartNumberList = () => {
-  return (
-    <div>PartNumberList</div>
-  )
-}
+  return <div>PartNumberList</div>;
+};
 
-export default PartNumberList
+export default PartNumberList;
