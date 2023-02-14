@@ -2,6 +2,7 @@
 import './globals.css';
 
 import { UserProvider } from '@auth0/nextjs-auth0/client';
+import { Auth0Provider } from '@auth0/auth0-react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
@@ -22,12 +23,22 @@ export default function RootLayout({
       */}
       <head />
       <body>
-        <UserProvider>
+        <Auth0Provider
+          domain='dev-dsuv8kmx.auth0.com'
+          clientId='canBWMbnoEequnkcL5gPnFGCWKugIiGo'
+          authorizationParams={{
+            redirect_uri: 'http://localhost:3000',
+            audience: 'https://dev-dsuv8kmx.auth0.com/api/v2/',
+            scope: 'read:current_user update:current_user_metadata'
+          }}
+        >
+          {/* <UserProvider> */}
           <QueryClientProvider client={queryClient}>
             <Drawer>{children}</Drawer>
             <ReactQueryDevtools initialIsOpen={false} />
           </QueryClientProvider>
-        </UserProvider>
+          {/* </UserProvider> */}
+        </Auth0Provider>
       </body>
     </html>
   );

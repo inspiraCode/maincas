@@ -1,21 +1,24 @@
+import { Get } from '@/core/ApiService';
+import useAuth from '@/core/useAuth';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import React from 'react';
 
-async function getData() {
-  // const resp = await fetch('https://api.dicebear.com/5.x/big-ears/svg');
-  const resp = await axios.get('https://pokeapi.co/api/v2/pokemon/ditto');
-
-  //   if (resp.status !== 200 ) {
-  //     throw new Error('Fail to fetch data...');
-  //   }
-  return resp;
-}
-
 interface CustomerListProps {}
 
 const CutomerList: React.FC<CustomerListProps> = () => {
-  const { data, isLoading } = useQuery(['pokemonList'], getData);
+  const { accessToken } = useAuth();
+  const { data, isLoading } = useQuery(
+    ['pokemonList'],
+    () => {
+      // const resp = await fetch('https://api.dicebear.com/5.x/big-ears/svg');
+      // const resp = await axios.get('https://pokeapi.co/api/v2/pokemon/ditto');
+      return Get('/api/v2/pokemon/ditto', accessToken, 'https://pokeapi.co');
+    },
+    {
+      enabled: !!accessToken
+    }
+  );
   return (
     <>
       <div>
