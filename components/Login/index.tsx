@@ -1,19 +1,24 @@
 import React, { useEffect } from 'react';
 import { useAuth0 } from '@auth0/auth0-react';
-import { Dialog } from '@mui/material';
+import { Dialog, Grid } from '@mui/material';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import WarehouseImage from '../../public/images/warehouse.jpg';
+import Image from 'next/image';
 
 const style = {
   position: 'absolute' as 'absolute',
-  top: '50%',
-  left: '50%',
-  transform: 'translate(-50%, -50%)',
-  width: 400,
-  bgcolor: 'background.paper',
-  border: '2px solid #000',
-  boxShadow: 24,
+  // top: '50%',
+  // left: '50%',
+  // transform: 'translate(-50%, -50%)',
+  // width: 400,
+  width: '100vw',
+  height: '100vh',
+  // bgcolor: 'background.paper',
+  // backgroundImage: WarehouseImage
+  // border: '2px solid #000',
+  // boxShadow: 24,
   p: 4
 };
 
@@ -45,15 +50,45 @@ const LoginModal = () => {
       aria-labelledby='modal-modal-title'
       aria-describedby='modal-modal-description'
     >
-      <Box sx={style}>
-        <Typography id='modal-modal-title' variant='h6' component='h2'>
-          Text in a modal
-        </Typography>
-        <Typography id='modal-modal-description' sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-        <Button onClick={() => loginWithRedirect()}>Log In</Button>
-      </Box>
+      <>
+        <Image
+          alt='Test'
+          src={WarehouseImage}
+          fill
+          style={{ filter: 'blur(4px)', WebkitFilter: 'blur(4px)' }}
+        />
+        <Box sx={style}>
+          <Grid
+            container
+            direction={'column'}
+            alignItems={'center'}
+            justifyContent={'center'}
+            spacing={2}
+            sx={{ height: '80%' }}
+          >
+            <Grid item>
+              <Typography
+                textAlign={'center'}
+                variant='h1'
+                fontWeight={'600'}
+                letterSpacing={10}
+                color={'whitesmoke'}
+                // fontFamily={'monospace'}
+              >
+                MAINCAS
+              </Typography>
+              <Typography textAlign={'center'} variant={'h5'} color={'white'}>
+                Sistema inteligente a Cadena de Suministro
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button variant='contained' onClick={() => loginWithRedirect()}>
+                Log In
+              </Button>
+            </Grid>
+          </Grid>
+        </Box>
+      </>
     </Dialog>
   );
 };

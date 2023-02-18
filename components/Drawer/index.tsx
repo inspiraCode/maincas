@@ -21,6 +21,9 @@ import MailIcon from '@mui/icons-material/Mail';
 import AdbIcon from '@mui/icons-material/Adb';
 
 import ResponsiveAppBar from '../AppBar';
+import { Business, Factory, GridView, Group } from '@mui/icons-material';
+import Link from 'next/link';
+import Head from 'next/head';
 
 const drawerWidth = 240;
 
@@ -92,6 +95,9 @@ const MiniDrawer: React.FC<MiniDrawerLeftProps> = ({ children }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
+      <Head>
+        <title>Maincas App</title>
+      </Head>
       <AppBar position='fixed' open={open}>
         <Toolbar>
           <IconButton
@@ -103,7 +109,12 @@ const MiniDrawer: React.FC<MiniDrawerLeftProps> = ({ children }) => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant='h6' noWrap component='div'>
+          <Typography
+            variant='h6'
+            noWrap
+            component='div'
+            sx={{ ...(open && { display: 'none' }) }}
+          >
             Maincas
           </Typography>
           <Box sx={{ flexGrow: 1 }} />
@@ -125,24 +136,24 @@ const MiniDrawer: React.FC<MiniDrawerLeftProps> = ({ children }) => {
         open={open}
       >
         <DrawerHeader>
-            <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-            <Typography
-              variant='h6'
-              noWrap
-              component='a'
-              // href='/'
-              sx={{
-                mr: 2,
-                display: { xs: 'none', md: 'flex' },
-                fontFamily: 'monospace',
-                fontWeight: 700,
-                letterSpacing: '.3rem',
-                color: 'inherit',
-                textDecoration: 'none'
-              }}
-            >
-              LOGO
-            </Typography>
+          <AdbIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <Typography
+            variant='h6'
+            noWrap
+            component='a'
+            // href='/'
+            sx={{
+              mr: 2,
+              display: { xs: 'none', md: 'flex' },
+              fontFamily: 'monospace',
+              fontWeight: 700,
+              letterSpacing: '.3rem',
+              color: 'inherit',
+              textDecoration: 'none'
+            }}
+          >
+            MAINCAS
+          </Typography>
           <IconButton onClick={handleDrawerClose}>
             {theme.direction === 'ltr' ? (
               <ChevronLeftIcon />
@@ -153,16 +164,32 @@ const MiniDrawer: React.FC<MiniDrawerLeftProps> = ({ children }) => {
         </DrawerHeader>
         <Divider />
         <List>
-          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-            <ListItem key={text} disablePadding>
+          <Link href={'companies'}>
+            <ListItem disablePadding>
               <ListItemButton>
                 <ListItemIcon>
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  <Factory />
                 </ListItemIcon>
-                <ListItemText primary={text} />
+                <ListItemText primary={'Companies'} />
               </ListItemButton>
             </ListItem>
-          ))}
+          </Link>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <Group />
+              </ListItemIcon>
+              <ListItemText primary={'Customers'} />
+            </ListItemButton>
+          </ListItem>
+          <ListItem disablePadding>
+            <ListItemButton>
+              <ListItemIcon>
+                <GridView />
+              </ListItemIcon>
+              <ListItemText primary={'Materials'} />
+            </ListItemButton>
+          </ListItem>
         </List>
         <Divider />
         <List>

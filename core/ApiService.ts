@@ -13,7 +13,7 @@ const Request = async (
   abortSignal?: AbortSignal
 ) => {
   try {
-    const baseUrl = BaseURL || process.env.NEXT_PUBLIC_BASE_URL;
+    const baseUrl = BaseURL || process.env.NEXT_PUBLIC_BACKEND_BASE_URL;
     if (!baseUrl) return;
 
     const response = await axios(baseUrl + urlPath, {

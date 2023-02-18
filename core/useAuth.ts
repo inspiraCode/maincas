@@ -39,17 +39,17 @@ const useAuth = (): IUseAuthReturn => {
           }
         });
 
-        console.log('accessToken-----', accessToken);
+        // console.log('accessToken-----', accessToken);
 
         const userDetailsByIdUrl = `https://${domain}/api/v2/users/${user?.sub}`;
-        console.log('userDetailsByIdUrl-----', userDetailsByIdUrl);
+        // console.log('userDetailsByIdUrl-----', userDetailsByIdUrl);
 
         const metadataResponse = await axios.get(userDetailsByIdUrl, {
           headers: {
             Authorization: `Bearer ${accessToken}`
           }
         });
-        console.log(metadataResponse.data);
+        // console.log(metadataResponse.data);
 
         const { data } = metadataResponse;
 

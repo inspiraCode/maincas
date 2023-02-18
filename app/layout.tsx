@@ -27,8 +27,8 @@ export default function RootLayout({
           domain='dev-dsuv8kmx.auth0.com'
           clientId='canBWMbnoEequnkcL5gPnFGCWKugIiGo'
           authorizationParams={{
-            redirect_uri: 'http://localhost:3000',
-            audience: 'https://dev-dsuv8kmx.auth0.com/api/v2/',
+            redirect_uri: process.env.NEXT_PUBLIC_BASE_URL,
+            audience: process.env.NEXT_PUBLIC_AUDIENCE,
             scope: 'read:current_user update:current_user_metadata'
           }}
         >
