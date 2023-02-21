@@ -1,7 +1,6 @@
 import { Get } from '@/core/ApiService';
 import useAuth from '@/core/useAuth';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import React from 'react';
 
 interface CustomerListProps {}

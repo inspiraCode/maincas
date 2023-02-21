@@ -25,8 +25,8 @@ const settings = [
 ];
 
 function ResponsiveAppBar() {
-    const { isLoading, logout, error } = useAuth0();
-    const { userMetadata} =useAuth()
+  const { isLoading, logout, error } = useAuth0();
+  const { userMetadata } = useAuth();
   const router = useRouter();
 
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(

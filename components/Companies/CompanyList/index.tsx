@@ -11,6 +11,7 @@ import {
 } from '@mui/material';
 import { Add, Factory } from '@mui/icons-material';
 import CompanyForm from '../CompanyForm';
+import { useCompanyListQuery } from '../companyHooks';
 
 const rows: GridRowsProp = [
   {
@@ -68,6 +69,8 @@ const columns: GridColDef[] = [
 ];
 
 const CompanyList = () => {
+  const { data, isLoading, error, isError } = useCompanyListQuery();
+  console.log(data);
   const [open, setOpen] = useState(false);
 
   const handleClose = () => {
