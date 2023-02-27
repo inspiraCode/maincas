@@ -1,17 +1,40 @@
 'use client';
 import React, { useState } from 'react';
-import { DataGrid, GridColDef, GridRowsProp } from '@mui/x-data-grid';
+import {
+  DataGrid,
+  GridColDef,
+  GridRenderCellParams,
+  GridRowsProp
+} from '@mui/x-data-grid';
 import {
   Button,
   Container,
   Dialog,
   Grid,
-  Icon,
+  IconButton,
   Typography
 } from '@mui/material';
-import { Add, Factory } from '@mui/icons-material';
+import { Add, Delete, Edit, Factory } from '@mui/icons-material';
 import CompanyForm from '../CompanyForm';
 import { useCompanyListQuery } from '../companyHooks';
+
+const Actions = ({ params, open }) => {
+  return (
+    <>
+      <IconButton
+        onClick={() => {
+          console.log(params.id);
+          open();
+        }}
+      >
+        <Edit color='primary' />
+      </IconButton>
+      <IconButton>
+        <Delete color='error' />
+      </IconButton>
+    </>
+  );
+};
 
 const rows: GridRowsProp = [
   {
@@ -58,20 +81,31 @@ const rows: GridRowsProp = [
   { id: 6, col1: 'MUI', col2: 'is Amazing' }
 ];
 
-const columns: GridColDef[] = [
-  { field: 'col1', headerName: 'Company Name', width: 150, flex: 1 },
-  { field: 'col2', headerName: 'Tax ID', width: 150, flex: 1 },
-  { field: 'col3', headerName: 'Legal Name', width: 150, flex: 1 },
-  { field: 'col4', headerName: 'Address', width: 150, flex: 1 },
-  { field: 'col5', headerName: 'City', width: 150, flex: 1 },
-  { field: 'col6', headerName: 'State', width: 150, flex: 1 },
-  { field: 'col7', headerName: 'Country', width: 150, flex: 1 }
-];
-
 const CompanyList = () => {
   const { data, isLoading, error, isError } = useCompanyListQuery();
   console.log(data);
   const [open, setOpen] = useState(false);
+
+  const columns: GridColDef[] = [
+    {
+      field: 'id',
+      headerName: 'Actions',
+      headerAlign: 'center',
+      maxWidth: 120,
+      align: 'center',
+      renderCell: (params: GridRenderCellParams<string>) => {
+        // console.log(params);
+        return <Actions params={params} open={() => setOpen(true)} />;
+      }
+    },
+    { field: 'col1', headerName: 'Company Name', width: 150, flex: 1 },
+    { field: 'col2', headerName: 'Tax ID', width: 150, flex: 1 },
+    { field: 'col3', headerName: 'Legal Name', width: 150, flex: 1 },
+    { field: 'col4', headerName: 'Address', width: 150, flex: 1 },
+    { field: 'col5', headerName: 'City', width: 150, flex: 1 },
+    { field: 'col6', headerName: 'State', width: 150, flex: 1 },
+    { field: 'col7', headerName: 'Country', width: 150, flex: 1 }
+  ];
 
   const handleClose = () => {
     setOpen(false);
