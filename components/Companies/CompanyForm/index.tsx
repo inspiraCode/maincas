@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
+  Box,
   Button,
+  CircularProgress,
   Dialog,
   DialogActions,
   DialogContent,
@@ -10,17 +12,30 @@ import {
 } from '@mui/material';
 import { DialogTransition } from '../../../Utils/DialogTransition';
 import { Close, Save } from '@mui/icons-material';
-import { useCreateCompanyMutation } from '../companyHooks';
+import {
+  useCompanyFormQuery,
+  useCreateCompanyMutation,
+  useUpdateCompanyMutation
+} from '../companyHooks';
 import { Company } from '../company';
 
-const CompanyForm = ({ open, handleClose }) => {
-  const createCompany = useCreateCompanyMutation();
-
+const CompanyForm = ({ open, handleClose, companyId }) => {
   const [companyState, setCompanyState] = useState<Company>();
+
+  const { data, isLoading, isError, error } = useCompanyFormQuery({
+    companyId
+  });
+  const createCompany = useCreateCompanyMutation();
+  const updateCompany = useUpdateCompanyMutation();
+
+  useEffect(() => {
+    setCompanyState(data as Company);
+  }, [data]);
 
   const handleSubmit = async () => {
     try {
-      await createCompany.mutateAsync(companyState);
+      if (companyState.id) await updateCompany.mutateAsync(companyState);
+      if (!companyState.id) await createCompany.mutateAsync(companyState);
       handleClose();
     } catch (error) {
       alert(error);
@@ -42,6 +57,7 @@ const CompanyForm = ({ open, handleClose }) => {
     });
   };
   console.log(companyState);
+
   return (
     <Dialog
       open={open}
@@ -49,79 +65,85 @@ const CompanyForm = ({ open, handleClose }) => {
       TransitionComponent={DialogTransition}
     >
       <DialogTitle>Company Form</DialogTitle>
+
       <DialogContent>
-        <Grid container spacing={2} sx={{ mt: 0.1 }}>
-          <Grid item xs={12}>
-            <TextField
-              id='name'
-              name='name'
-              label='Company Name'
-              fullWidth
-              value={companyState?.name}
-              onChange={handleChange}
-            />
+        {isLoading ? (
+          'Loading...'
+        ) : (
+          <Grid container spacing={2} sx={{ mt: 0.1 }}>
+            <Grid item xs={12}>
+              <TextField
+                id='name'
+                name='name'
+                label='Company Name'
+                fullWidth
+                value={companyState?.name}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id='taxId'
+                name='taxId'
+                label='Tax Id'
+                fullWidth
+                value={companyState?.taxId}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id='legalName'
+                name='legalName'
+                label='Legal Name'
+                fullWidth
+                value={companyState?.legalName}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id='address'
+                name='addressLineOne'
+                label='Address'
+                fullWidth
+                value={companyState?.addressLineOne}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id='city'
+                name='addressCity'
+                label='City'
+                fullWidth
+                value={companyState?.addressCity}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id='state'
+                name='addressState'
+                label='State'
+                fullWidth
+                value={companyState?.addressState}
+                onChange={handleChange}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                id='country'
+                name='addressCountry'
+                label='Country'
+                fullWidth
+                value={companyState?.addressCountry}
+                onChange={handleChange}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id='taxId'
-              name='taxId'
-              label='Tax Id'
-              fullWidth
-              value={companyState?.taxId}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id='legalName'
-              name='legalName'
-              label='Legal Name'
-              fullWidth
-              value={companyState?.legalName}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id='address'
-              name='addressLineOne'
-              label='Address'
-              fullWidth
-              value={companyState?.addressLineOne}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id='city'
-              name='addressCity'
-              label='City'
-              fullWidth
-              value={companyState?.addressCity}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id='state'
-              name='addressState'
-              label='State'
-              fullWidth
-              value={companyState?.addressState}
-              onChange={handleChange}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              id='country'
-              name='addressCountry'
-              label='Country'
-              fullWidth
-              value={companyState?.addressCountry}
-              onChange={handleChange}
-            />
-          </Grid>
-        </Grid>
+        )}
+
         {/* <DialogContentText>
           Let Google help apps determine location. This means sending anonymous
           location data to Google, even when no apps are running.

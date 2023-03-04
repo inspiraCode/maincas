@@ -7,7 +7,9 @@ import {
   GridRowsProp
 } from '@mui/x-data-grid';
 import {
+  Box,
   Button,
+  CircularProgress,
   Container,
   Dialog,
   Grid,
@@ -17,74 +19,38 @@ import {
 import { Add, Delete, Edit, Factory } from '@mui/icons-material';
 import CompanyForm from '../CompanyForm';
 import { useCompanyListQuery } from '../companyHooks';
-
-const Actions = ({ params, open }) => {
-  return (
-    <>
-      <IconButton
-        onClick={() => {
-          console.log(params.id);
-          open();
-        }}
-      >
-        <Edit color='primary' />
-      </IconButton>
-      <IconButton>
-        <Delete color='error' />
-      </IconButton>
-    </>
-  );
-};
-
-const rows: GridRowsProp = [
-  {
-    id: 1,
-    col1: 'Empresa',
-    col2: 'EMPR098790IWE',
-    col3: 'Empresa SA de CV',
-    col4: 'Calle y Numero',
-    col5: 'Ciudad',
-    col6: 'Estado',
-    col7: 'Pais'
-  },
-  {
-    id: 2,
-    col1: 'Empresa',
-    col2: 'EMPR098790IWE',
-    col3: 'Empresa SA de CV',
-    col4: 'Calle y Numero',
-    col5: 'Ciudad',
-    col6: 'Estado',
-    col7: 'Pais'
-  },
-  {
-    id: 3,
-    col1: 'Empresa',
-    col2: 'EMPR098790IWE',
-    col3: 'Empresa SA de CV',
-    col4: 'Calle y Numero',
-    col5: 'Ciudad',
-    col6: 'Estado',
-    col7: 'Pais'
-  },
-  {
-    id: 4,
-    col1: 'Empresa',
-    col2: 'EMPR098790IWE',
-    col3: 'Empresa SA de CV',
-    col4: 'Calle y Numero',
-    col5: 'Ciudad',
-    col6: 'Estado',
-    col7: 'Pais'
-  },
-  { id: 5, col1: 'DataGridPro', col2: 'is Awesome' },
-  { id: 6, col1: 'MUI', col2: 'is Amazing' }
-];
+import CompanyDeleteForm from '../CompanyDeleteForm';
 
 const CompanyList = () => {
-  const { data, isLoading, error, isError } = useCompanyListQuery();
-  console.log(data);
+  const { data, isLoading, error, isError, isFetching } = useCompanyListQuery();
+  // console.log(data);
+
+  const [companyId, setCompanyId] = useState<number | string>(0);
   const [open, setOpen] = useState(false);
+  const [companyName, setCompanyName] = useState('');
+  const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
+
+  const handleClose = () => {
+    setCompanyId(-1);
+    setOpen(false);
+  };
+
+  const handleOpen = (id = -1) => {
+    setCompanyId(id);
+    setOpen(true);
+  };
+
+  if (isLoading) {
+    return (
+      <Box
+        sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  const rows: GridRowsProp = data;
 
   const columns: GridColDef[] = [
     {
@@ -94,25 +60,34 @@ const CompanyList = () => {
       maxWidth: 120,
       align: 'center',
       renderCell: (params: GridRenderCellParams<string>) => {
-        // console.log(params);
-        return <Actions params={params} open={() => setOpen(true)} />;
+        const { id, row } = params;
+        const { name } = row;
+        return (
+          <>
+            <IconButton onClick={() => handleOpen(id as number)}>
+              <Edit color='primary' />
+            </IconButton>
+            <IconButton
+              onClick={() => {
+                setCompanyId(id);
+                setCompanyName(name);
+                setOpenDeleteDialog(true);
+              }}
+            >
+              <Delete color='error' />
+            </IconButton>
+          </>
+        );
       }
     },
-    { field: 'col1', headerName: 'Company Name', width: 150, flex: 1 },
-    { field: 'col2', headerName: 'Tax ID', width: 150, flex: 1 },
-    { field: 'col3', headerName: 'Legal Name', width: 150, flex: 1 },
-    { field: 'col4', headerName: 'Address', width: 150, flex: 1 },
-    { field: 'col5', headerName: 'City', width: 150, flex: 1 },
-    { field: 'col6', headerName: 'State', width: 150, flex: 1 },
-    { field: 'col7', headerName: 'Country', width: 150, flex: 1 }
+    { field: 'name', headerName: 'Company Name', width: 150, flex: 1 },
+    { field: 'taxId', headerName: 'Tax ID', width: 150, flex: 1 },
+    { field: 'legalName', headerName: 'Legal Name', width: 150, flex: 1 },
+    { field: 'addressLineOne', headerName: 'Address', width: 150, flex: 1 },
+    { field: 'addressCity', headerName: 'City', width: 150, flex: 1 },
+    { field: 'addressState', headerName: 'State', width: 150, flex: 1 },
+    { field: 'addressCountry', headerName: 'Country', width: 150, flex: 1 }
   ];
-
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleOpen = () => {
-    setOpen(true);
-  };
 
   return (
     <Container maxWidth={'xl'}>
@@ -143,7 +118,7 @@ const CompanyList = () => {
           <Button
             variant='contained'
             startIcon={<Add />}
-            onClick={handleOpen}
+            onClick={() => handleOpen()}
             // fullWidth={{ display: { xs: true, md: false } }}
             // sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }}
           >
@@ -152,11 +127,25 @@ const CompanyList = () => {
         </Grid>
         <Grid item xs={12}>
           <div style={{ height: 800, backgroundColor: 'white' }}>
-            <DataGrid rows={rows} columns={columns} />
+            <DataGrid rows={rows} columns={columns} loading={isLoading} />
           </div>
         </Grid>
       </Grid>
-      {open && <CompanyForm open={open} handleClose={() => handleClose()} />}
+      {open && (
+        <CompanyForm
+          open={open}
+          handleClose={() => handleClose()}
+          companyId={companyId}
+        />
+      )}
+      {openDeleteDialog && (
+        <CompanyDeleteForm
+          open={openDeleteDialog}
+          handleClose={() => setOpenDeleteDialog(false)}
+          companyId={companyId}
+          companyName={companyName}
+        />
+      )}
     </Container>
   );
 };

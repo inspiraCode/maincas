@@ -13,3 +13,9 @@ export interface Company {
   roles: string;
   block: boolean;
 }
+
+export interface CompanyComment {
+  id: number;
+  comment: string;
+  company: Company;
+}
